@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Inicio</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"/>
+    </h:head>
+    <h:body style="background-color: #8A0C0C;" >
+        <h:form>
+            <p:menubar model="#{menuController.model}">
+                <f:facet name="options">
+                    <p:commandButton value="Cerrar Sesión" actionListener="#{menuController.cerrarSesion()}" action="/login?faces-redirect=true"/>
+                </f:facet>
+
+            </p:menubar>
+        </h:form>
+        <br/>
+        <p:separator style="width: 1100px;"/>
+        <br/>
+        <h:form style="text-align: center">
+            <p:graphicImage library="images" name="unicaes_v2_res.png"  height="150px" url="/inicio.xhtml"  />
+        </h:form>
+        <br/>
+        <h:form style="padding-bottom: 150px">
+            <h2 align="center" style="color: #F0B643;">
+                <u>
+                    Misión
+                </u>
+            </h2>
+            <h:panelGrid style="padding-left: 150px;padding-right: 150px">
+                <p style="color: #F0B643">
+                    Nuestra Misión es la formación de personas, inspirada en los principios cristianos y en los conocimientos técnicos y científicos, orientada a una constante búsqueda de la verdad y del uso del saber, para contribuir a la tutela y desarrollo de la dignidad humana y de la sociedad, mediante la investigación, docencia y la proyección social.
+                </p>
+            </h:panelGrid>
+            <br/>
+            <h2 align="center" style="color: #F0B643">
+                <u>
+                    Visión
+                </u>
+            </h2>
+            <h:panelGrid style="padding-left: 150px;padding-right: 150px">
+                <p style="color: #F0B643">
+                    Seremos una universidad con excelentes servicios de educación superior, líderes en la formación integral de la persona humana y de la sociedad, dentro de las exigencias de la verdad y del bien común.
+                </p>
+            </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>
+

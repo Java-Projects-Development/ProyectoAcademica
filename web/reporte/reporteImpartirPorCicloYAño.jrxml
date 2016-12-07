@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="188cc221-cd4b-4ef1-ae6c-e5bcdcf531c4">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="217"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="ciclo" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="año" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="facultad" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT impartir.seccion, impartir.capacidad, impartir.seccion, impartir.año, impartir.ciclo, facultad.nombre,asignatura.nombreAsignatura,docente.nombres,docente.apellidos FROM impartir INNER JOIN facultad ON impartir.id_facultad = facultad.id_facultad INNER JOIN asignatura ON impartir.id_asignatura=asignatura.id_asignatura INNER JOIN docente ON impartir.id_docente=docente.id_docente WHERE impartir.id_facultad=$P{facultad} AND impartir.ciclo= $P{ciclo} AND impartir.año=$P{año}]]>
+	</queryString>
+	<field name="SECCION" class="java.lang.String"/>
+	<field name="CAPACIDAD" class="java.math.BigDecimal"/>
+	<field name="AÑO" class="java.math.BigDecimal"/>
+	<field name="CICLO" class="java.math.BigDecimal"/>
+	<field name="NOMBRE" class="java.lang.String"/>
+	<field name="NOMBREASIGNATURA" class="java.lang.String"/>
+	<field name="NOMBRES" class="java.lang.String"/>
+	<field name="APELLIDOS" class="java.lang.String"/>
+	<group name="NOMBRE">
+		<groupExpression><![CDATA[$F{NOMBRE}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<textField>
+					<reportElement style="SubTitle" x="143" y="13" width="657" height="24" forecolor="#000000" uuid="93352d30-fd19-4958-ab41-85d60d2ed792"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{NOMBRE}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement mode="Opaque" x="97" y="13" width="36" height="24" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="7dfbf501-4ae4-49c6-be1a-2fd262cfed92"/>
+				</rectangle>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="30">
+				<frame>
+					<reportElement mode="Opaque" x="652" y="0" width="150" height="30" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="fd0ecc5a-7931-44f6-a114-908308be090c"/>
+				</frame>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band height="575" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="475" width="105" height="100" backcolor="#666666" uuid="e95778ee-17b5-430d-8574-94d5fbbe1fa0"/>
+				<textField>
+					<reportElement style="Column header" x="0" y="0" width="104" height="73" forecolor="#000000" uuid="f34b92e7-aac5-4f8e-8085-89f65cbe0d14"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="58" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="0" y="77" width="104" height="20" forecolor="#000000" uuid="d5400f22-73db-47ce-8f1a-274bd094a8ad"/>
+					<box leftPadding="4" rightPadding="4"/>
+					<textElement textAlignment="Center">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement mode="Transparent" x="42" y="73" width="20" height="1" backcolor="#FFFFFF" uuid="62b9f9a1-3031-46ef-8dcb-67c611459081"/>
+				</line>
+			</frame>
+		</band>
+	</background>
+	<title>
+		<band height="104" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="0" width="802" height="67" uuid="0fb44231-cf45-48b3-bd67-7dcee664412b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="54" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[REPORTE MATERIAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="232" y="67" width="568" height="37" uuid="602a30f1-dec8-4abd-b6a4-ce0ef8e5d383"/>
+				<textElement textAlignment="Right">
+					<font size="26"/>
+				</textElement>
+				<text><![CDATA[A IMPARTIR]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="97" y="5" width="705" height="20" backcolor="#666666" uuid="277c50d1-1aa0-4ded-b1a0-08f8cb1fd697"/>
+				<staticText>
+					<reportElement style="Column header" x="0" y="4" width="100" height="15" uuid="76c3b25c-2a35-4a3f-acbe-ea01bcd09f2c"/>
+					<text><![CDATA[ASIGNATURA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="124" y="4" width="63" height="15" uuid="2c335bcd-2cd0-42bf-b8f4-2acba31d954e"/>
+					<text><![CDATA[SECCIÓN]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="634" y="4" width="39" height="15" uuid="41003606-63d7-47af-923b-039fee6effde"/>
+					<text><![CDATA[AÑO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="526" y="4" width="41" height="15" uuid="6b478486-42ae-482b-a55a-0b21462d30ad"/>
+					<text><![CDATA[CICLO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="394" y="5" width="73" height="15" uuid="0908b1d7-d039-4107-b169-c749de4edca6"/>
+					<text><![CDATA[CAPACIDAD]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="237" y="4" width="100" height="15" uuid="8bd09601-7fd1-48f3-bf83-2ecdf473c5b5"/>
+					<text><![CDATA[DOCENTE]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="44" splitType="Stretch">
+			<frame>
+				<reportElement x="97" y="1" width="705" height="15" uuid="d41f0954-ff07-4859-b4a1-a64c20607da0"/>
+				<textField>
+					<reportElement style="Detail" x="596" y="0" width="100" height="15" uuid="466d64c6-ce92-4b01-ae93-bf8237bb7c64"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$F{AÑO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="496" y="0" width="100" height="15" uuid="45cac9d5-9d69-4927-9baf-bf8619c4040a"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$F{CICLO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="100" y="0" width="100" height="15" uuid="ba30a5eb-d19b-42eb-b807-7a16aabdaa8f"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$F{SECCION}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="97" y="16" width="705" height="1" uuid="f30d7cfc-98f0-479a-8cd3-b52de47a816b"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="373" y="0" width="89" height="15" uuid="a07513eb-13e0-4d20-84d4-8e35245139c0"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{APELLIDOS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="96" y="0" width="114" height="17" uuid="95abbef2-8390-4d15-a455-ea657d643b11"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{NOMBREASIGNATURA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="474" y="1" width="100" height="15" uuid="dedfcee5-4747-4d5d-99fe-10a656db2474"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{CAPACIDAD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="284" y="0" width="100" height="15" uuid="53c09387-efd4-4fb2-9150-157c50458c5c"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="39" splitType="Stretch">
+			<staticText>
+				<reportElement x="96" y="0" width="267" height="20" uuid="208200fe-b328-40a3-9828-2e456498e51d"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[REPORTE MATERIAS A IMPARTIR]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="702" y="0" width="100" height="20" uuid="b5911397-52ab-40b6-8ba6-673575acad68"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

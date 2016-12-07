@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>REGISTRO DE ESTUDIANTES</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"/>
+    </h:head>
+    <h:body style="background-color: #8A0C0C">
+
+        <h:form>
+            <p:menubar model="#{menuController.model}">
+
+
+                <f:facet name="options">
+                    <p:commandButton value="Cerrar Sesión" actionListener="#{menuController.cerrarSesion()}" action="/login?faces-redirect=true"/>
+                </f:facet>
+
+            </p:menubar>
+            <br/>
+        </h:form>
+
+        <p:separator style="width: 1100px;"/>
+        <br/>
+        <h:form style="text-align: right">
+            <p:graphicImage library="images" name="unicaes_v2_res.png"  height="150px" style="padding-right: 40px; float: right;"  url="/inicio.xhtml" />
+        </h:form>
+        <br/>
+        <h:form id="frmDatosPersonales" style="font-size: 12px">
+            <p:growl id="mensaje" autoUpdate="true" severity="info,fatal" showSummary="true" showDetail="true" life="3000"/>
+            <p:fieldset legend="Datos Personales"  style="margin-right: 220px ;margin-left: 220px; border-style: solid; border-color: #000000;  " toggleable="true" toggleSpeed="1000" >
+                <p:panelGrid  columns="3" id="pgDatos" layout="grid" style="text-align: center; padding-left: 150px;padding-right: 150px;" >
+                    <p:outputLabel /><p:outputLabel /><p:outputLabel />
+                    <p:outputLabel for="txtNombres" value="Nombres"/>
+                    <p:inputText id="txtNombres" value="#{estudianteController.estudiante.nombres}" required="true" requiredMessage="Los nombres son obligatorios"/>
+                    <p:message for="txtNombres"/>
+
+                    <p:outputLabel for="txtApellidos" value="Apellidos"/>
+                    <p:inputText id="txtApellidos" value="#{estudianteController.estudiante.apellidos}" required="true" requiredMessage="Los apellidos son obligatorios"/>
+                    <p:message for="txtApellidos"/>
+
+                    <p:outputLabel for="txtDUI" value="DUI"/>
+                    <p:inputMask id="txtDUI" value="#{estudianteController.estudiante.dui}"  mask="99999999-9" />
+                    <p:message for="txtDUI"/>
+
+                    <p:outputLabel for="txtNIT" value="NIT"/>
+                    <p:inputMask id="txtNIT" value="#{estudianteController.estudiante.nit}"  mask="9999-999999-999-9" />
+                    <p:message for="txtNIT"/>
+
+                    <p:outputLabel for="txtFecha" value="Fec. Nacimiento"/>
+                    <p:calendar id="txtFecha" value="#{estudianteController.estudiante.fechaNacimiento}" locale="es" pattern="dd/MM/yyyy" required="true" requiredMessage="La fecha de nacimiento es obligatoria"/>
+                    <p:message for="txtFecha"/>
+
+                    <p:outputLabel for="txtDireccion" value="Dirección"/>
+                    <p:inputTextarea id="txtDireccion" value="#{estudianteController.estudiante.direccion}" required="true" requiredMessage="La dirección es obligatoria"/>
+                    <p:message for="txtDireccion"/>
+
+                    <p:outputLabel for="rdbSexo" value="Sexo"/>
+                    <p:selectOneRadio id="rdbSexo" value="#{estudianteController.estudiante.sexo}" required="true" requiredMessage="El sexo del estudiante es obligatorio">
+                        <f:selectItem itemValue="M" itemLabel="Masculino"/>
+                        <f:selectItem itemValue="F" itemLabel="Femenino"/>
+                    </p:selectOneRadio>
+                    <p:message for="rdbSexo"/>
+
+                    <p:outputLabel for="txtTelefono" value="Teléfono" />
+                    <p:inputMask id="txtTelefono" value="#{estudianteController.estudiante.telefono}" required="true" mask="9999-9999" requiredMessage="El teléfono es obligatorio"/>
+                    <p:message for="txtTelefono"/>
+
+                    <p:outputLabel for="txtCorreo" value="Correo electrónico"/>
+                    <p:inputText id="txtCorreo" value="#{estudianteController.estudiante.correo}" required="true" requiredMessage="El e-mail es obligatorio"/>
+                    <p:message for="txtCorreo"/>  
+                    <p:column/><p:column/>
+                    <!--Carrera-->
+                    <p:outputLabel for="txtCarrera" value="Carrera"/>
+                    <p:inputText id="txtCarrera" value="#{estudianteController.carrera.id_carrera}" disabled="true" style="text-align: center">
+                        <f:ajax listener="#{estudianteController.alElegirFila}" />                  
+                    </p:inputText>
+                    <p:commandButton id="carbtn" value="Seleccionar Carrera" type="button" styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black;'/>
+                    <p:overlayPanel id="panelCarrera" for="carbtn" hideEffect="fade" dynamic="true" modal="false" style="width:600px">
+
+                        <p:dataTable var="carr" value="#{estudianteController.carreras}"
+                                     emptyMessage="No hay carreras en la base de datos"
+                                     paginator="true" rows="5" paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5" reflow="true" resizeMode="expand" rowExpandMode="multiply" style="font-size: 10px;text-align: center" widgetVar="data" 
+                                     selectionMode="single" selection="#{estudianteController.carrera}" rowKey="#{carr.id_carrera}">
+
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Buscar en todos los campos" style="padding-right: 10px"/>
+                                    <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" placeholder="Ingrese cualquier palabra o numero" style="width: 350px"/>
+                                </p:outputPanel>
+                            </f:facet>
+                            <p:ajax event="rowSelect" listener="#{estudianteController.carreraSeleccionada}" update=":frmDatosPersonales:txtCarrera "/>
+                            <p:ajax event="rowUnselect" listener="#{estudianteController.carreraDeseleccionada}" update=":frmDatosPersonales:mensaje" />        
+                            <p:column headerText="Id Carrera" filterBy="#{carr.id_carrera}" filterStyle="width: 75px" filterMatchMode="contains" style="text-align: center">
+                                <h:outputText value="#{carr.id_carrera}"/>
+                            </p:column>
+                            <p:column headerText="Código Carrera" filterBy="#{carr.codigo_carrera}" filterStyle="width: 75px" filterMatchMode="contains" style="text-align: center">
+                                <h:outputText value="#{carr.codigo_carrera}"  />
+                            </p:column>
+                            <p:column headerText="Nombre Carrera" filterBy="#{carr.nombre_carrera}" filterStyle="width: 75px" filterMatchMode="contains" style="text-align: center">
+                                <h:outputText value="#{carr.nombre_carrera}"/>
+                            </p:column>
+                            <p:column headerText="Facultad" filterBy="#{carr.facultad.nombre_facultad}" filterStyle="width: 75px" filterMatchMode="contains" style="text-align: center">
+                                <h:outputText value="#{carr.facultad.nombre_facultad}"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </p:overlayPanel>
+                    <!--Aqui termina Carrera-->
+                    <p:column/><p:column/>
+                    <p:commandButton icon="ui-icon-check" value="Registrar" action="/estudiantes.xhtml" update=" mensaje, :frmDatosPersonales :frmMostrar" actionListener="#{estudianteController.registrar()}"
+                                     styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black' />         
+                    <p:column/><p:column/><p:column/>
+                </p:panelGrid>
+                <br/>
+            </p:fieldset>
+        </h:form>
+        <br/>
+
+        <p:separator style="width:1100px; "/>
+        <br/>
+        <h:form id="frmMostrar">
+            <p:fieldset legend="Estudiantes Registrados" toggleable="true" toggleSpeed="1000">
+                <p:dataTable var="est" value="#{estudianteController.estudiantes}"
+                             emptyMessage="No hay estudiantes en la base de datos"
+                             paginator="true" rows="5" paginatorPosition="bottom"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5" reflow="true" resizeMode="expand" rowExpandMode="multiply" style="font-size: 10px;text-align: center" widgetVar="data" >
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Buscar en todos los campos" style="padding-right: 10px"/>
+                            <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" placeholder="Ingrese cualquier palabra o numero" style="width: 350px"/>
+                            <p:commandButton action="/reportesEstudiantes.xhtml?faces-redirect=true" value="Reportes" styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black'/>
+                        </p:outputPanel>
+                    </f:facet>
+
+                    <p:column headerText="Id Estudiante" filterBy="#{est.id_estudiante}" filterStyle="width: 75px" filterMatchMode="contains" >
+                        <h:outputText value="#{est.id_estudiante}"  />
+                    </p:column>
+                    <p:column headerText="Nombre Completo" filterBy="#{est.nombres} #{est.apellidos}" filterStyle="width: 75px" filterMatchMode="contains" >
+                        <h:outputText value="#{est.nombres} #{est.apellidos}"/>
+                    </p:column>
+                    <p:column headerText="DUI" filterBy="#{est.dui}" filterStyle="width: 75px" filterMatchMode="contains" >
+                        <h:outputText value="#{est.dui}"/>
+                    </p:column>
+                    <p:column headerText="NIT" filterBy="#{est.nit}" filterStyle="width: 75px" filterMatchMode="contains" style="width: 100px">
+                        <h:outputText value="#{est.nit}"/>
+                    </p:column>
+                    <p:column  headerText="Dirección" filterBy="#{est.direccion}" filterStyle="width: 75px" filterMatchMode="contains" >
+                        <h:outputText value="#{est.direccion}"/>
+                    </p:column>
+                    <p:column headerText="Fec. Nacimiento" filterBy="#{est.fechaNacimiento}" filterStyle="width: 75px" filterMatchMode="contains" >
+                        <h:outputText value="#{est.fechaNacimiento}">
+                            <f:convertDateTime pattern="dd-MMM-yyyy" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column  headerText="Sexo" filterBy="#{est.sexo}" filterStyle="width: 75px" filterMatchMode="contains" >
+                        <h:outputText value="#{est.sexo}"/>
+                    </p:column>
+                    <p:column headerText="Telefono" filterBy="#{est.telefono}" filterStyle="width: 75px" filterMatchMode="contains" >
+                        <h:outputText value="#{est.telefono}" />
+                    </p:column>
+                    <p:column headerText="Correo" filterBy="#{est.correo}" filterStyle="width: 75px" filterMatchMode="contains" >
+                        <h:outputText value="#{est.correo}"/>
+                    </p:column>
+                    <p:column headerText="Carrera" filterBy="#{est.id_carrera.nombre_carrera}" filterStyle="width: 75px" filterMatchMode="contains" >
+                        <h:outputText value="#{est.id_carrera.nombre_carrera}"/>
+                    </p:column>
+
+                    <p:column headerText="Modificar" style="text-align: center;">
+
+                        <p:commandButton icon="ui-icon-pencil"
+                                         oncomplete="PF('dlgmodificar').show();" update=":frmModificar">
+                            <f:setPropertyActionListener target="#{estudianteController.estudiante}" value="#{est}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="Eliminar" style="text-align: center;">
+                        <p:commandButton icon="ui-icon-trash" oncomplete="PF('dlgeliminar').show();">
+                            <f:setPropertyActionListener target="#{estudianteController.estudiante}" value="#{est}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+        </h:form>
+
+        <p:dialog id="dlg" header="Modificar estudiante" showEffect="fade" hideEffect="fade"
+                  widgetVar="dlgmodificar" modal="true" draggable="false" resizable="false" minWidth="250" style="background:#8A0C0C;" >
+            <h:form id="frmModificar" >
+                <p:fieldset  legend="Datos Personales"  style="border-style: solid; border-color: #000000;  "  >
+                    <h:panelGrid columns="3" id="pgDatos" >
+
+                        <p:outputLabel for="txtNombres" value="Nombres" />
+                        <p:inputText id="txtNombres" value="#{estudianteController.estudiante.nombres}" required="true"/>
+                        <p:message for="txtNombres"/>
+
+                        <p:outputLabel for="txtApellidos" value="Apellidos"/>
+                        <p:inputText id="txtApellidos" value="#{estudianteController.estudiante.apellidos}" required="true"/>
+                        <p:message for="txtApellidos"/>
+
+                        <p:outputLabel for="txtDUI" value="DUI"/>
+                        <p:inputMask id="txtDUI" value="#{estudianteController.estudiante.dui}"  mask="99999999-9"/>
+                        <p:message for="txtDUI"/>
+
+                        <p:outputLabel for="txtNIT" value="NIT"/>
+                        <p:inputMask id="txtNIT" value="#{estudianteController.estudiante.nit}"  mask="9999-999999-999-9"/>
+                        <p:message for="txtNIT"/>
+
+                        <p:outputLabel for="txtFecha" value="Fec. Nacimiento"/>
+                        <p:calendar id="txtFecha" value="#{estudianteController.estudiante.fechaNacimiento}" locale="es" pattern="dd/MM/yyyy" required="true"/>
+                        <p:message for="txtFecha"/>
+
+                        <p:outputLabel for="txtDireccion" value="Dirección"/>
+                        <p:inputTextarea id="txtDireccion" value="#{estudianteController.estudiante.direccion}" required="true"/>
+                        <p:message for="txtDireccion"/>
+
+                        <p:outputLabel for="rdbSexo" value="Sexo"/>
+                        <p:selectOneRadio id="rdbSexo" value="#{estudianteController.estudiante.sexo}" required="true">
+                            <f:selectItem itemValue="M" itemLabel="Masculino"/>
+                            <f:selectItem itemValue="F" itemLabel="Femenino"/>
+                        </p:selectOneRadio>
+                        <p:message for="rdbSexo"/>
+
+                        <p:outputLabel for="txtTelefono" value="Teléfono"/>
+                        <p:inputMask id="txtTelefono" value="#{estudianteController.estudiante.telefono}" required="true" mask="9999-9999"/>
+                        <p:message for="txtTelefono"/>
+
+                        <p:outputLabel for="txtCorreo" value="Correo electrónico"/>
+                        <p:inputText id="txtCorreo" value="#{estudianteController.estudiante.correo}" required="true"/>
+                        <p:message for="txtCorreo"/>  
+
+                        <p:outputLabel/><p:outputLabel/><p:outputLabel/>
+                        <p:outputLabel/><p:outputLabel/><p:outputLabel/>
+                        <p:column/>
+                        <p:commandButton value="Modificar" update=":frmMostrar"
+                                         actionListener="#{estudianteController.modificar()}"
+                                         oncomplete="PF('dlgmodificar').hide();" style='background: #F0B643;color: black;border-color: black;'
+                                         styleClass="ui-priority-primary" action="estudiantes.xhtml"/>
+                    </h:panelGrid>
+                </p:fieldset>
+            </h:form>
+        </p:dialog>
+        <p:dialog id="dlg2" header="Eliminar Estudiante"
+                  showEffect="explode" hideEffect="explode"
+                  widgetVar="dlgeliminar" modal="true" resizable="false" minWidth="200">
+            <h:form id="formEliminar">
+                <h:outputText value="¿Desea eliminar este registro?"/>
+                <p:commandButton value="Si" actionListener="#{estudianteController.eliminar()}"
+                                 update=":frmMostrar" action="/estudiantes.xhtml" oncomplete="PF('dlgeliminar').hide();"/>
+                <p:commandButton value="No" onclick="PF('dlgeliminar').hide()"/>
+            </h:form>
+
+        </p:dialog>
+        <!--Scripts-->
+        <h:outputScript library="js" name="spanishLocale.js"/>
+
+    </h:body>
+</html>

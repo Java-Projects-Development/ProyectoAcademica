@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>REGISTRO DE SECCIONES</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"/>
+    </h:head>
+    <h:body style="background-color: #8A0C0C">
+        <h:form>
+            <p:menubar model="#{menuController.model}">
+
+
+                <f:facet name="options">
+                    <p:commandButton value="Cerrar Sesión" actionListener="#{menuController.cerrarSesion()}" action="/login?faces-redirect=true"/>
+                </f:facet>
+
+            </p:menubar>
+        </h:form>
+        <br/>
+        <p:separator style="width: 1100px;"/>
+        <br/>
+        <h:form style="text-align: right">
+            <p:graphicImage library="images" name="unicaes_v2_res.png"  height="150px" style="padding-right: 40px; float: right;" url="/inicio.xhtml"/>
+        </h:form>
+        <br/>
+
+        <h:form id="frmDatosSeccion" style="font-size: 12px">
+            <p:growl id="mensaje" autoUpdate="true" severity="info,fatal,warn" showSummary="true" showDetail="true"/>
+            <p:fieldset legend="Datos de la Materia a Impartir" style="margin-right: 250px ;margin-left: 250px; border-style: solid; border-color: #000000;" toggleable="true" toggleSpeed="1000">
+                <p:panelGrid columns="3" id="pgDatos" layout="grid" style="text-align: center; padding-left: 100px;padding-right: 100px;">
+                    <p:column/><p:column/><p:column/>
+
+                    <p:outputLabel for="cboFacultad" value="Facultad"/>
+                    <p:selectOneMenu id="cboFacultad" value="#{impartirController.facultad.id_facultad}" required="true" requiredMessage="Debe asignar una facultad a la carrera">
+                        <f:selectItem itemLabel="-- Seleccione una opción --" />
+                        <f:selectItems value="#{impartirController.facultades}" var="fac" itemLabel="#{fac.nombre_facultad}" itemValue="#{fac.id_facultad}"/>
+                    </p:selectOneMenu>
+                    <p:message for="cboFacultad"/>
+
+                    <p:column/><p:column/>
+
+                    <!--Asignaturas-->
+                    <p:outputLabel for="txtAsignatura" value="Asignatura"/>
+                    <p:inputText id="txtAsignatura" value="#{impartirController.asignatura.id_asignatura}" disabled="true" style="text-align: center">
+                        <f:ajax listener="#{impartirController.alElegirFila}" />                  
+                    </p:inputText>
+                    <p:commandButton id="asigbtn" value="Seleccionar Asignatura" type="button" styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black'/>
+                    <p:overlayPanel id="panelAsignatura" for="asigbtn" hideEffect="fade" dynamic="true" modal="false" style="width:600px">
+                        <p:dataTable id="asigDT" var="asig" value="#{impartirController.asignaturas}"
+                                     emptyMessage="No hay asignaturas en la base de datos"
+                                     paginator="true" rows="5" paginatorPosition="top"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5" reflow="true" resizeMode="expand" rowExpandMode="multiply" style="font-size: 10px;text-align: center" widgetVar="data"
+                                     selectionMode="single" selection="#{impartirController.asignatura}" rowKey="#{asig.id_asignatura}">
+
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Buscar en todos los campos" style="padding-right: 10px"/>
+                                    <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" placeholder="Ingrese cualquier palabra o numero" style="width: 350px;text-align: center"/>
+                                </p:outputPanel>
+                            </f:facet>
+                            <p:ajax event="rowSelect" listener="#{impartirController.asignaturaSeleccionada}" update=":frmDatosSeccion:txtAsignatura "/>
+                            <p:ajax event="rowUnselect" listener="#{impartirController.asignaturaDeseleccionada}" update=":frmDatosSeccion:mensaje" />
+
+                            <p:column headerText="Id Asignatura" filterBy="#{asig.id_asignatura}"  filterStyle="width: 75px" filterMatchMode="contains">
+                                <h:outputText value="#{asig.id_asignatura}"/>
+                            </p:column>
+                            <p:column headerText="Código Asignatura" filterBy="#{asig.codigo_asignatura}"  filterStyle="width: 75px" filterMatchMode="contains">
+                                <h:outputText value="#{asig.codigo_asignatura}"/>
+                            </p:column>
+                            <p:column headerText="Nombre Asignatura" filterBy="#{asig.nombre_asignatura}"  filterStyle="width: 75px" filterMatchMode="contains">
+                                <h:outputText value="#{asig.nombre_asignatura}"/>
+                            </p:column>
+                            <p:column headerText="UV" filterBy="#{asig.uv}"  filterStyle="width: 75px" filterMatchMode="contains">
+                                <h:outputText value="#{asig.uv}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:overlayPanel>
+                    <!--Aqui termina Asignaturas-->
+                    <p:outputLabel />
+                    <p:outputLabel for="txtSeccion" value="Sección"/>
+                    <p:inputText id="txtSeccion" value="#{impartirController.impartir.seccion}" required="true"/>
+                    <p:message for="txtSeccion"/>
+                    <p:column/><p:column/>
+                    <!--Docentes-->
+                    <p:outputLabel for="txtDocente" value="Docente"/>
+                    <p:inputText id="txtDocente" value="#{impartirController.docente.id_docente}" disabled="true" style="text-align: center">
+                        <f:ajax listener="#{impartirController.alElegirFila}" />                  
+                    </p:inputText>
+                    <p:commandButton id="docbtn" value="Seleccionar Docente" type="button" styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black;'/>
+                    <p:overlayPanel id="panelDocente" for="docbtn" hideEffect="fade" dynamic="true" modal="false" style="width:600px">
+
+                        <p:dataTable var="doc" value="#{impartirController.docentes}"
+                                     emptyMessage="No hay docentes en la base de datos"
+                                     paginator="true" rows="5" paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5" reflow="true" resizeMode="expand" rowExpandMode="multiply" style="font-size: 10px;text-align: center" widgetVar="data" 
+                                     selectionMode="single" selection="#{impartirController.docente}" rowKey="#{doc.id_docente}">
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Buscar en todos los campos" style="padding-right: 10px"/>
+                                    <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" placeholder="Ingrese cualquier palabra o numero" style="width: 350px"/>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:ajax event="rowSelect" listener="#{impartirController.docenteSeleccionado}" update=":frmDatosSeccion:txtDocente "/>
+                            <p:column headerText="Id Docente" filterBy="#{doc.id_docente}" filterStyle="width: 75px" filterMatchMode="contains" style="text-align: center">
+                                <h:outputText value="#{doc.id_docente}"/>
+                            </p:column>
+                            <p:column headerText="Nombre Completo" filterBy="#{doc.nombres} #{doc.apellidos}" filterStyle="width: 75px" filterMatchMode="contains" style="text-align: center">
+                                <h:outputText value="#{doc.nombres} #{doc.apellidos}"/>
+                            </p:column>
+                            <p:column headerText="Facultad" filterBy="#{doc.facultad.nombre_facultad}" filterStyle="width: 75px" filterMatchMode="contains" >
+                                <h:outputText value="#{doc.facultad.nombre_facultad}"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </p:overlayPanel>
+                    <!--Aqui termina Docentes-->
+                    <p:column/>
+                    <p:outputLabel for="txtCapacidad" value="Capacidad"/>
+                    <p:inputText id="txtCapacidad" value="#{impartirController.impartir.capacidad}" required="true"/>
+                    <p:message for="txtCapacidad"/>
+
+                    <p:outputLabel for="cboCiclo" value="Ciclo"/>
+                    <p:selectOneMenu id="cboCiclo" value="#{impartirController.impartir.ciclo}" required="true" requiredMessage="Campo requerido">
+                        <f:selectItem itemValue="1" itemLabel="1"/>
+                        <f:selectItem itemValue="2" itemLabel="2"/>
+                    </p:selectOneMenu>
+                    <p:message for="cboCiclo"/>   
+
+                    <p:outputLabel for="txtAño" value="Año" />
+                    <p:inputText id="txtAño" value="#{impartirController.impartir.año}" required="true" disabled="true" style="text-align: center"/>
+                    <p:message for="txtAño"/>
+
+                    <p:column/>
+                    <p:commandButton icon="ui-icon-check" value="Registrar" action="/impartir.xhtml?faces-redirect=true" update="pgDatos, mensaje,:frmMostrar" actionListener="#{impartirController.registrar()}"
+                                     styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black'/>
+                    <p:column/>
+                    <p:column/>
+                    <p:column/>
+                </p:panelGrid>
+                <br/>
+            </p:fieldset>
+        </h:form>
+        <br/>
+
+        <p:separator style="width:1100px; "/>
+        <br/>
+
+        <h:form id="frmMostrar">
+            <p:fieldset legend="Materias a Impartir Registradas" toggleable="true" toggleSpeed="1000">
+                <p:dataTable var="imp" value="#{impartirController.impartidas}"
+                             emptyMessage="No hay materias a impartir en la base de datos"
+                             paginator="true" rows="5" paginatorPosition="top"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5" reflow="true" resizeMode="expand" rowExpandMode="multiply" style="font-size: 10px;text-align: center" widgetVar="data">
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Buscar en todos los campos" style="padding-right: 10px"/>
+                            <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" placeholder="Ingrese cualquier palabra o número" style="width: 350px"/>
+                            <p:commandButton action="/reportesImpartir.xhtml?faces-redirect=true" value="Reportes" styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black'/>
+                        </p:outputPanel>
+                    </f:facet>
+                    <p:column headerText="Id Impartir" filterBy="##{imp.id_impartir}" filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{imp.id_impartir}"/>
+                    </p:column>
+                    <p:column headerText="Facultad" filterBy="#{imp.facultad.nombre_facultad}" filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{imp.facultad.nombre_facultad}"/>
+                    </p:column>
+                    <p:column headerText="Asignatura" filterBy="#{imp.asignatura.nombre_asignatura}" filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{imp.asignatura.nombre_asignatura}"/>
+                    </p:column>
+                    <p:column headerText="Sección" filterBy="#{imp.seccion}" filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{imp.seccion}"/>
+                    </p:column>
+                    <p:column  headerText="Docente" filterBy="#{imp.docente.nombres} #{imp.docente.apellidos}" filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{imp.docente.nombres} #{imp.docente.apellidos}"/>
+                    </p:column>
+                    <p:column headerText="Capacidad" filterBy="#{imp.capacidad}" filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{imp.capacidad}"/>
+                    </p:column>
+
+                    <p:column headerText="Ciclo" filterBy="#{imp.ciclo}" filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{imp.ciclo}"/>
+                    </p:column>
+                    <p:column headerText="Año" filterBy="#{imp.año}" filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{imp.año}"/>
+                    </p:column>
+                    <p:column headerText="Modificar" style="text-align: center;">
+
+                        <p:commandButton icon="ui-icon-pencil"
+                                         oncomplete="PF('dlgmodificar').show();" update=":frmModificar">
+                            <f:setPropertyActionListener target="#{impartirController.impartir}" value="#{imp}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="Eliminar" style="text-align: center;">
+                        <p:commandButton icon="ui-icon-trash" oncomplete="PF('dlgeliminar').show();">
+                            <f:setPropertyActionListener target="#{impartirController.impartir}" value="#{imp}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+        </h:form>
+
+        <p:dialog id="dlg" header="Modificar Impartir" showEffect="fade" hideEffect="fade"
+                  widgetVar="dlgmodificar" modal="true" resizable="false" minWidth="250" style="background:#8A0C0C;">
+            <h:form id="frmModificar">
+                <p:fieldset legend="Datos de la Materia a Impartir" style="border-style: solid; border-color: #000000;">
+                    <p:panelGrid columns="3" id="pgDatos" layout="grid" style="padding-left: 50px;padding-right: 50px">
+                        <p:outputLabel /><p:outputLabel /><p:outputLabel />
+                        <p:outputLabel for="cboFacultad" value="Facultad" />
+                        <p:selectOneMenu id="cboFacultad" value="#{impartirController.facultad.id_facultad}">
+                            <f:selectItems value="#{impartirController.facultades}" var="fac" itemLabel="#{fac.nombre_facultad}" itemValue="#{fac.id_facultad}"/>
+                        </p:selectOneMenu>
+                        <p:message for="cboFacultad"/>
+
+                        <p:outputLabel for="cboAsignatura" value="Asignatura"/>
+                        <p:selectOneMenu id="cboAsignatura" value="#{impartirController.asignatura.id_asignatura}">
+                            <f:selectItems value="#{impartirController.asignaturas}" var="asig" itemLabel="#{asig.nombre_asignatura}" itemValue="#{asig.id_asignatura}"/>
+                        </p:selectOneMenu>
+                        <p:message for="cboAsignatura"/>
+
+                        <p:outputLabel for="txtSeccion" value="Sección"/>
+                        <p:inputText id="txtSeccion" value="#{impartirController.impartir.seccion}" required="true"/>
+                        <p:message for="txtSeccion"/>
+
+                        <p:outputLabel for="cboDocente" value="Docente"/>
+                        <p:selectOneMenu id="cboDocente" value="#{impartirController.docente.id_docente}">
+                            <f:selectItems value="#{impartirController.docentes}" var="doc" itemLabel="#{doc.nombres} #{doc.apellidos}" itemValue="#{doc.id_docente}"/>
+                        </p:selectOneMenu>
+                        <p:message for="cboDocente"/>
+
+                        <p:outputLabel for="txtCapacidad" value="Capacidad"/>
+                        <p:inputText id="txtCapacidad" value="#{impartirController.impartir.capacidad}" required="true"/>
+                        <p:message for="txtCapacidad"/>
+                        <p:column/>
+                        <p:commandButton value="Modificar" update=":frmMostrar"
+                                         actionListener="#{impartirController.modificar()}"
+                                         oncomplete="PF('dlgmodificar').hide();" action="/impartir.xhtml" styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black'/>
+                    </p:panelGrid>
+                </p:fieldset>
+            </h:form>
+        </p:dialog>
+        <p:dialog id="dlg2" header="Eliminar Impartir"
+                  showEffect="explode" hideEffect="explode"
+                  widgetVar="dlgeliminar" modal="true" resizable="false" minWidth="200">
+            <h:form id="formEliminar">
+                <h:outputText value="¿Desea eliminar este registro?"/>
+                <p:commandButton value="Si" actionListener="#{impartirController.eliminar()}"
+                                 update=":frmMostrar" action="/impartir.xhtml" oncomplete="PF('dlgeliminar').hide();"/>
+                <p:commandButton value="No" onclick="PF('dlgeliminar').hide()"/>
+            </h:form>
+        </p:dialog>
+        <h:outputScript target="facDT">
+            jQuery.noConflict();
+            $(window).load(function () {
+            $(document).delegate("#facDT td", "click", function (event) {
+            var columnNumber = jQuery(this).index();//get index of clicked row
+            var colval=jQuery(this).find('div span').text()); // get the column value
+            $("#frmDatosSeccion\\:txtFacultad").val(colval); //set value in the inputtext
+            $("#frmDatosSeccion\\:txtFacultad").change(); //this will trigger the ajax listener
+            });
+            });
+        </h:outputScript>
+    </h:body>
+</html>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>REGISTRO DE ASIGNATURAS</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"/>
+    </h:head>
+    <h:body style="background-color: #8A0C0C">
+        <h:form>
+            <p:menubar model="#{menuController.model}">
+
+
+                <f:facet name="options">
+                    <p:commandButton value="Cerrar Sesión" actionListener="#{menuController.cerrarSesion()}" action="/login?faces-redirect=true"/>
+                </f:facet>
+
+            </p:menubar>
+        </h:form>
+        <br/>
+        <p:separator style="width: 1100px;"/>
+        <br/>
+
+        <p:graphicImage library="images" name="unicaes_v2_res.png"  height="150px" style="padding-right: 40px; float: right;" url="/inicio.xhtml"  />
+        <br/>
+
+        <h:form id="frmDatosAsignatura" style="font-size: 12px" >
+            <p:growl id="mensaje" autoUpdate="true" severity="info,fatal,warn" showSummary="true" showDetail="true"/>
+            <p:fieldset legend="Datos de la Asignatura" style="margin-right: 220px ;margin-left: 220px; border-style: solid; border-color: #000000;" toggleable="true" toggleSpeed="1000">
+                <p:panelGrid columns="3" id="pgDatos" layout="grid" style="text-align: center; padding-left: 120px;padding-right: 120px;">
+                    <p:outputLabel /><p:outputLabel /><p:outputLabel />
+                    <p:outputLabel /><p:outputLabel /><p:outputLabel />
+                    <p:outputLabel for="txtIDAsignatura" value="Código Asignatura"/>
+                    <p:inputText id="txtIDAsignatura" value="#{asignaturaController.asignatura.codigo_asignatura}" required="true" requiredMessage="El código de la asignatura es obligatorio"/>
+                    <p:message for="txtIDAsignatura"/>
+
+                    <p:outputLabel for="txtNombre" value="Nombre de la Asignatura"/>
+                    <p:inputText id="txtNombre" value="#{asignaturaController.asignatura.nombre_asignatura}" required="true" requiredMessage="El nombre de la asignatura es obligatorio"/>
+                    <p:message for="txtNombre"/>
+
+                    <p:outputLabel for="txtUV" value="Unidades Valorativas"/>
+                    <p:inputText id="txtUV" value="#{asignaturaController.asignatura.uv}" required="true" requiredMessage="La cantidad de UV es obligatoria"/>
+                    <p:message for="txtUV"/>
+                    <p:column/><p:column/>
+                    <!--Carrera-->
+                    <p:outputLabel for="txtCarrera" value="Carrera"/>
+                    <p:inputText id="txtCarrera" value="#{asignaturaController.carrera.id_carrera}" disabled="true" style="text-align: center">
+                        <f:ajax listener="#{asignaturaController.alElegirFila}" />                  
+                    </p:inputText>
+                    <p:commandButton id="carbtn" value="Seleccionar Carrera" type="button" styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black;'/>
+                    <p:overlayPanel id="panelCarrera" for="carbtn" hideEffect="fade" dynamic="true" modal="false" style="width:600px">
+
+                        <p:dataTable var="carr" value="#{asignaturaController.carreras}"
+                                     emptyMessage="No hay carreras en la base de datos"
+                                     paginator="true" rows="5" paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5" reflow="true" resizeMode="expand" rowExpandMode="multiply" style="font-size: 10px;text-align: center" widgetVar="data" 
+                                     selectionMode="single" selection="#{asignaturaController.carrera}" rowKey="#{carr.id_carrera}">
+
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Buscar en todos los campos" style="padding-right: 10px"/>
+                                    <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" placeholder="Ingrese cualquier palabra o numero" style="width: 350px"/>
+                                </p:outputPanel>
+                            </f:facet>
+                            <p:ajax event="rowSelect" listener="#{asignaturaController.carreraSeleccionada}" update=":frmDatosAsignatura:txtCarrera "/>
+                            <p:ajax event="rowUnselect" listener="#{asignaturaController.carreraDeseleccionada}" update=":frmDatosAsignatura:mensaje" />        
+                            <p:column headerText="Id Carrera" filterBy="#{carr.id_carrera}" filterStyle="width: 75px" filterMatchMode="contains" style="text-align: center">
+                                <h:outputText value="#{carr.id_carrera}"/>
+                            </p:column>
+                            <p:column headerText="Código Carrera" filterBy="#{carr.codigo_carrera}" filterStyle="width: 75px" filterMatchMode="contains" style="text-align: center">
+                                <h:outputText value="#{carr.codigo_carrera}"  />
+                            </p:column>
+                            <p:column headerText="Nombre Carrera" filterBy="#{carr.nombre_carrera}" filterStyle="width: 75px" filterMatchMode="contains" style="text-align: center">
+                                <h:outputText value="#{carr.nombre_carrera}"/>
+                            </p:column>
+                            <p:column headerText="Facultad" filterBy="#{carr.facultad.nombre_facultad}" filterStyle="width: 75px" filterMatchMode="contains" style="text-align: center">
+                                <h:outputText value="#{carr.facultad.nombre_facultad}"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </p:overlayPanel>
+                    <!--Aqui termina Carrera-->
+
+                    <p:column/><p:column/>
+                    <p:commandButton icon="ui-icon-check" value="Registrar" action="/asignaturas.xhtml?faces-redirect=true" update=":frmDatosAsignatura, mensaje,:frmMostrar" 
+                                     actionListener="#{asignaturaController.registrar()}" styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black'/>
+
+
+                    <p:column/><p:column/><p:column/>
+                </p:panelGrid>
+                <br/>
+            </p:fieldset>
+        </h:form>
+        <br/>
+        <p:separator style="width:1100px; "/>
+        <br/>
+
+        <p:fieldset legend="Asignaturas Registradas" toggleable="true" toggleSpeed="1000">
+            <h:form id="frmMostrar">
+                <p:dataTable var="asig" value="#{asignaturaController.asignaturas}"
+                             emptyMessage="No hay asignaturas en la base de datos"
+                             paginator="true" rows="5" paginatorPosition="top"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5" reflow="true" resizeMode="expand" rowExpandMode="multiply" style="font-size: 10px;text-align: center" widgetVar="data">
+
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Buscar en todos los campos" style="padding-right: 10px"/>
+                            <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" placeholder="Ingrese cualquier palabra o numero" style="width: 350px;text-align: center"/>
+                            <p:commandButton value="Reportes" actionListener="#{asignaturaReporteBean.verReporte()}" styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black' ajax="false"/>
+                        </p:outputPanel>
+                    </f:facet>
+
+                    <p:column headerText="Id Asignatura" filterBy="#{asig.id_asignatura}"  filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{asig.id_asignatura}"/>
+                    </p:column>
+                    <p:column headerText="Código Asignatura" filterBy="#{asig.codigo_asignatura}"  filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{asig.codigo_asignatura}"/>
+                    </p:column>
+                    <p:column headerText="Nombre Asignatura" filterBy="#{asig.nombre_asignatura}"  filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{asig.nombre_asignatura}"/>
+                    </p:column>
+                    <p:column headerText="UV" filterBy="#{asig.uv}"  filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{asig.uv}"/>
+                    </p:column>
+                    <p:column headerText="Carrera" filterBy="#{asig.carrera.nombre_carrera}"  filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{asig.carrera.nombre_carrera}"/>
+                    </p:column>
+                    <p:column headerText="Modificar" style="text-align: center;">
+
+                        <p:commandButton icon="ui-icon-pencil"
+                                         oncomplete="PF('dlgmodificar').show();" update=":frmModificar">
+                            <f:setPropertyActionListener target="#{asignaturaController.asignatura}" value="#{asig}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="Eliminar" style="text-align: center;">
+                        <p:commandButton icon="ui-icon-trash" oncomplete="PF('dlgeliminar').show();">
+                            <f:setPropertyActionListener target="#{asignaturaController.asignatura}" value="#{asig}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:fieldset>
+        <p:dialog id="dlg" header="Modificar Asignatura" showEffect="fade" hideEffect="fade"
+                  widgetVar="dlgmodificar" modal="true" resizable="false" minWidth="250" style="background:#8A0C0C;">
+            <h:form id="frmModificar">
+                <p:fieldset legend="Datos de Facultad" style="border-style: solid; border-color: #000000;">
+                    <p:panelGrid columns="3" id="pgDatosFacultad" layout="grid">
+                        <p:outputLabel /><p:outputLabel /><p:outputLabel />
+                        <p:outputLabel for="txtIDAsignatura" value="Código Asignatura"/>
+                        <p:inputText id="txtIDAsignatura" value="#{asignaturaController.asignatura.codigo_asignatura}" required="true"/>
+                        <p:message for="txtIDAsignatura"/>
+
+                        <p:outputLabel for="txtNombre" value="Nombre de la Asignatura"/>
+                        <p:inputText id="txtNombre" value="#{asignaturaController.asignatura.nombre_asignatura}" required="true"/>
+                        <p:message for="txtNombre"/>
+
+                        <p:outputLabel for="txtUV" value="Unidades Valorativas"/>
+                        <p:inputText id="txtUV" value="#{asignaturaController.asignatura.uv}" required="true"/>
+                        <p:message for="txtUV"/>
+
+                        <p:column/>
+                        <p:commandButton value="Modificar" update=":frmMostrar"
+                                         actionListener="#{asignaturaController.modificar()}"
+                                         oncomplete="PF('dlgmodificar').hide();" action="/asignaturas.xhtml" style='background: #F0B643;color: black;border-color: black'
+                                         styleClass="ui-priority-primary"/>
+                        <p:column/>
+                        <p:column/>
+                        <p:column/>
+                    </p:panelGrid>
+                </p:fieldset>
+            </h:form>
+        </p:dialog>
+        <p:dialog id="dlg2" header="Eliminar Asignatura"
+                  showEffect="explode" hideEffect="explode"
+                  widgetVar="dlgeliminar" modal="true" resizable="false" minWidth="200">
+            <h:form id="formEliminar">
+                <h:outputText value="¿Desea eliminar este registro?"/>
+                <p:commandButton value="Si" actionListener="#{asignaturaController.eliminar()}"
+                                 update=":frmMostrar" action="/asignaturas.xhtml" oncomplete="PF('dlgeliminar').hide();"/>
+                <p:commandButton value="No" onclick="PF('dlgeliminar').hide()"/>
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>

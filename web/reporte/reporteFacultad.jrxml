@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8d763699-6c17-49f4-abbf-bee3f8f4e681">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="facultad" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select * from facultad where nombre like '%$P!{facultad}%']]>
+	</queryString>
+	<field name="ID_FACULTAD" class="java.math.BigDecimal"/>
+	<field name="CODIGO_FACULTAD" class="java.lang.String"/>
+	<field name="NOMBRE" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="224" y="37" width="211" height="20" uuid="9fdad998-cdf8-48de-a384-ddd68716a4f5"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE FACULTADES]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="67" y="2" width="100" height="20" uuid="4cc66432-448f-464e-9b34-b7de4182f96c"/>
+				<text><![CDATA[ID_FACULTAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="238" y="2" width="110" height="20" uuid="b3185ade-77ac-4591-85c5-9002c04a87bd"/>
+				<text><![CDATA[CODIGO_FACULTAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="435" y="2" width="100" height="20" uuid="52fa3393-a575-4a6a-9727-24c387dec712"/>
+				<text><![CDATA[NOMBRE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="86" splitType="Stretch">
+			<textField>
+				<reportElement x="54" y="53" width="100" height="20" uuid="a6a61e95-8ea6-48dd-a206-54ac0e397962"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{ID_FACULTAD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="238" y="53" width="100" height="20" uuid="0e82a5db-576c-4dfe-999a-265b9ded2e00"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{CODIGO_FACULTAD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="415" y="53" width="120" height="32" uuid="838172f0-e438-442c-9888-386f7a42bbce"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{NOMBRE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>REPORTES DE DOCENTES</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"/>
+    </h:head>
+    <h:body style="background-color: #8A0C0C">
+        <h:form>
+            <p:menubar model="#{menuController.model}">
+
+
+                <f:facet name="options">
+                    <p:commandButton value="Cerrar Sesión" actionListener="#{menuController.cerrarSesion()}" action="/login?faces-redirect=true"/>
+                </f:facet>
+
+            </p:menubar>
+            <br/>
+            <p:separator style="width: 1100px;"/>
+            <br/>
+
+            <p:graphicImage library="images" name="unicaes_v2_res.png"  height="150px" style="padding-right: 40px; float: right;" url="/inicio.xhtml"  />
+            <br/>
+        </h:form>
+
+
+        <h:form id="frmReportesDocentes" style="font-size: 12px">
+            <p:fieldset legend="Reportes" style="margin-right: 220px ;margin-left: 220px; border-style: solid; border-color: #000000;" toggleable="true" toggleSpeed="1000">
+                <p:panelGrid columns="3" id="Reportes"  layout="grid" style="text-align: center; padding-left: 120px;padding-right: 120px;">
+                    <p:outputLabel /><p:outputLabel /><p:outputLabel />
+                    <p:outputLabel /><p:outputLabel /><p:outputLabel />
+                    
+                    <p:outputLabel for="cboFacultad" value="Reporte con Parámetros"/> 
+                    <p:selectOneMenu id="cboFacultad" value="#{docenteReporteBean.facultad}">
+                        <f:selectItems value="#{docenteReporteBean.facultades}" var="fac" itemLabel="#{fac.nombre_facultad}" itemValue="#{fac.id_facultad}" />
+                    </p:selectOneMenu>
+                    <p:commandButton icon="ui-icon-check" value="Generar Reporte con Parámetros" actionListener="#{docenteReporteBean.verReporte()}" 
+
+                                     styleClass="ui-priority-primary" style="background: #F0B643;color: black;border-color: black" ajax="false"/>
+                </p:panelGrid>
+                <br/>
+            </p:fieldset>
+        </h:form>
+    </h:body>
+</html>

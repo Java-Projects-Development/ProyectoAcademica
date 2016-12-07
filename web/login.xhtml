@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Login</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body style="background-color: #8A0C0C">
+
+        <p:dialog id="dlg" header="Inicio de Sesión" showEffect="fade" hideEffect="fade" draggable="false"
+                  widgetVar="dlglogin" modal="true" closable="false" resizable="false" minWidth="250" style="background:#8A0C0C;" visible="true" >
+            <h:form id="frmLogin">
+                <p:growl autoUpdate="true" severity="info,fatal,warn" showDetail="true"/>
+                <p:fieldset  style="border-style: solid; border-color: #000000;">
+                    <p:panelGrid columns="3" id="pgDatosLogin" layout="grid">
+                        <p:outputLabel /><p:outputLabel /><p:outputLabel />
+
+                        <p:graphicImage library="images" name="login.png" height="150px" style="text-align: center;padding-left: 80px" />
+
+                        <p:column/>
+                        <p:column/>
+                        <p:outputLabel for="txtUsuario" value="Usuario:"/>
+                        <p:inputText id="txtUsuario" value="#{loginController.usuario.usuario}" required="true"/>
+                        <p:message for="txtUsuario"/>
+
+                        <p:outputLabel for="txtClave" value="Clave"/>
+                        <p:password id="txtClave" value="#{loginController.usuario.clave}" required="true"/>
+                        <p:message for="txtClave"/>
+
+                        <p:column/>
+
+                        <p:commandButton value="Iniciar Sesión"
+                                         action="#{loginController.iniciarSesion()}"
+                                         style="background: #F0B643;color: black;border-color: black;width: 150px;"
+                                         oncomplete="if (!args.validationFailed &amp;&amp; args.saved) dlglogin.hide();"  styleClass="ui-priority-primary" />
+                        <p:column/>
+                        <p:column/>
+                        <p:column/>
+                    </p:panelGrid>
+                </p:fieldset>
+            </h:form>
+        </p:dialog>
+        
+    </h:body>
+</html>

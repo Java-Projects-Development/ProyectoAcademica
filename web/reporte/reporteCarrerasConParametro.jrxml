@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="ed05891a-c266-40b7-8063-6e9b180c2621">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="facultad" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select carrera.codigo_carrera,carrera.nombre_carrera, facultad.id_facultad,facultad.nombre from carrera INNER JOIN facultad ON carrera.id_facultad=facultad.id_facultad WHERE carrera.id_facultad=$P{facultad}]]>
+	</queryString>
+	<field name="CODIGO_CARRERA" class="java.lang.String"/>
+	<field name="NOMBRE_CARRERA" class="java.lang.String"/>
+	<field name="ID_FACULTAD" class="java.math.BigDecimal"/>
+	<field name="NOMBRE" class="java.lang.String"/>
+	<group name="NOMBRE">
+		<groupExpression><![CDATA[$F{NOMBRE}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<textField>
+					<reportElement style="SubTitle" x="143" y="13" width="410" height="24" forecolor="#000000" uuid="da60d2ea-ac1e-4aa8-875e-ec693c949622"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{NOMBRE}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement mode="Opaque" x="97" y="13" width="36" height="24" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="f80d7add-982c-4dbd-811f-84cb441ddaff"/>
+				</rectangle>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="30">
+				<frame>
+					<reportElement mode="Opaque" x="405" y="0" width="150" height="30" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="0645685d-ccf2-4f7a-82fc-90c08274a32a"/>
+				</frame>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band height="822" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="722" width="105" height="100" forecolor="#666666" backcolor="#666666" uuid="6c1e927d-6afe-4c08-b6c0-99d1c1cee831"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textField isBlankWhenNull="true">
+					<reportElement style="Column header" x="0" y="0" width="104" height="73" forecolor="#000000" uuid="8fa01ebe-cca8-4268-8210-ed74dc44eb5a"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="58" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="0" y="77" width="104" height="20" forecolor="#000000" uuid="695fdb33-bf0c-4c41-a84f-3eeb48d34826"/>
+					<box leftPadding="4" rightPadding="4"/>
+					<textElement textAlignment="Center">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement mode="Transparent" x="42" y="73" width="20" height="1" uuid="27171b49-4d38-4c74-8043-764917153f5e"/>
+				</line>
+			</frame>
+		</band>
+	</background>
+	<title>
+		<band height="152" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="0" width="555" height="115" uuid="1582c7bf-a391-42b2-b1b3-b5a9c36af95d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="40" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[REPORTE CARRERAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="234" y="115" width="321" height="37" uuid="48cf9a39-adb0-49c7-8b29-4083b052eaa1"/>
+				<textElement textAlignment="Right">
+					<font size="22"/>
+				</textElement>
+				<text><![CDATA[POR FACULTAD]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="97" y="5" width="458" height="20" backcolor="#666666" uuid="9034b546-9484-46da-8b01-5ec485e6093f"/>
+				<staticText>
+					<reportElement style="Column header" x="0" y="0" width="229" height="15" uuid="428411e6-c52d-4d03-9872-1f698bd9e2c4"/>
+					<text><![CDATA[CÓDIGO CARRERA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="229" y="0" width="229" height="15" uuid="f58a536a-5547-4674-a413-7c38258f72db"/>
+					<text><![CDATA[NOMBRE CARRERA]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<frame>
+				<reportElement x="97" y="1" width="458" height="15" uuid="95650764-ece8-4fb9-9076-be7000c34f8c"/>
+				<textField>
+					<reportElement style="Detail" x="0" y="0" width="229" height="15" uuid="761d4b07-e0d1-4ae6-a02e-93f70fe01d14"/>
+					<textFieldExpression><![CDATA[$F{CODIGO_CARRERA}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Detail" x="229" y="0" width="229" height="15" uuid="4a9c6f38-eb88-4eac-9e47-5e802780864f"/>
+					<textFieldExpression><![CDATA[$F{NOMBRE_CARRERA}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="97" y="16" width="458" height="1" uuid="6a2b18cc-643e-4173-b944-cacd7d11fc89"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="100" splitType="Stretch">
+			<staticText>
+				<reportElement style="Column header" x="96" y="0" width="267" height="20" forecolor="#000000" uuid="f7a70e10-ae10-49f5-a3cc-292676853cab"/>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Reporte Carreras por Facultad]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="453" y="0" width="100" height="20" uuid="c74a8274-a559-417d-8da4-ea942ce4e810"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

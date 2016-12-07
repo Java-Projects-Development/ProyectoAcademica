@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="da25a632-a198-4c85-94fd-fc28ec255e79">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="48"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#FFFFFF" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<queryString>
+		<![CDATA[select * from facultad ORDER BY nombre]]>
+	</queryString>
+	<field name="ID_FACULTAD" class="java.math.BigDecimal"/>
+	<field name="CODIGO_FACULTAD" class="java.lang.String"/>
+	<field name="NOMBRE" class="java.lang.String"/>
+	<background>
+		<band height="575" splitType="Stretch">
+			<rectangle>
+				<reportElement x="-20" y="234" width="20" height="241" backcolor="#000000" uuid="88efdde1-5837-47f6-b618-28ce8fd72a97"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="475" width="105" height="100" backcolor="#666666" uuid="0d91a2fc-8faa-476a-abd0-4aa15bb66738"/>
+				<textField>
+					<reportElement style="Column header" x="0" y="0" width="104" height="73" forecolor="#000000" uuid="c87fc68a-cde2-4d6f-ad8d-b7daa8c6c65b"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="58" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="0" y="77" width="104" height="20" forecolor="#000000" uuid="e6fe91dd-e744-4697-94f0-67f1fdfdc3f1"/>
+					<box leftPadding="4" rightPadding="4"/>
+					<textElement textAlignment="Center">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement mode="Transparent" x="42" y="73" width="20" height="1" backcolor="#FFFFFF" uuid="f75bc353-67eb-484e-95c2-49285d22ff92"/>
+				</line>
+			</frame>
+		</band>
+	</background>
+	<title>
+		<band height="104" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="0" width="802" height="67" uuid="7393e869-7eef-4ef1-8620-b93e0e99276c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="54" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[REPORTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="232" y="67" width="568" height="37" uuid="0efd1793-2532-469b-8be2-787fc2b817fb"/>
+				<textElement textAlignment="Right">
+					<font size="26"/>
+				</textElement>
+				<text><![CDATA[FACULTADES]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="95" y="0" width="705" height="20" backcolor="#666666" uuid="40b65d52-e533-431d-9768-714e9a202750"/>
+				<staticText>
+					<reportElement style="Column header" x="20" y="5" width="235" height="15" uuid="9825a7e5-8487-4384-95b6-915a30e44df5"/>
+					<text><![CDATA[CODIGO DE FACULTAD]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="341" y="5" width="235" height="15" uuid="6861f59c-558b-4e1a-9dd8-8d8021742afa"/>
+					<text><![CDATA[NOMBRE]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<frame>
+				<reportElement x="97" y="1" width="705" height="15" uuid="edeac1a4-3477-4e28-8ef6-4f8e54d0996b"/>
+				<textField>
+					<reportElement style="Detail" x="18" y="0" width="235" height="15" uuid="e44c5d9c-53e9-4070-b4c2-0bd6504fb6ac"/>
+					<textFieldExpression><![CDATA[$F{CODIGO_FACULTAD}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="97" y="16" width="705" height="1" uuid="547af86d-d28c-4bdf-a8ed-b41246e80ac7"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="436" y="0" width="235" height="15" uuid="30ec70d7-165d-4e35-a002-62b5b35d87db"/>
+				<textFieldExpression><![CDATA[$F{NOMBRE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="39" splitType="Stretch">
+			<staticText>
+				<reportElement x="96" y="0" width="267" height="20" uuid="3a00b357-2d7a-4a4f-8918-2ebdcd48e566"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Reporte de Facultades]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="700" y="0" width="100" height="20" uuid="ca14cf8a-ae3f-4fa5-8a42-5f1701d49135"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

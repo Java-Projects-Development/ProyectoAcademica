@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>REGISTRO DE INSCRIPCIONES</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"/>
+    </h:head>
+    <h:body style="background-color: #8A0C0C">
+        <h:form>
+            <p:menubar model="#{menuController.model}" >
+
+                <f:facet name="options">
+                    <p:commandButton value="Cerrar Sesión" actionListener="#{menuController.cerrarSesion()}" action="/login?faces-redirect=true"/>
+                </f:facet>
+
+            </p:menubar>
+        </h:form>
+        <br/>
+        <p:separator style="width: 1100px;"/>
+        <br/>
+        <h:form style="text-align: right">
+            <p:graphicImage library="images" name="unicaes_v2_res.png"  height="150px" style="padding-right: 40px; float: right;" url="/inicio.xhtml"/>
+        </h:form>
+        <br/>
+
+        <h:form id="frmDatosInscripcion" style="font-size: 12px">
+            <p:growl id="mensaje" autoUpdate="true" severity="info,fatal,warn" showSummary="true" showDetail="true"/>
+            <p:fieldset legend="Datos de la Inscripción" style="margin-right: 250px ;margin-left: 250px; border-style: solid; border-color: #000000;" toggleable="true" toggleSpeed="1000">
+                <p:panelGrid columns="3" id="pgDatos" layout="grid" style="text-align: center; padding-left: 70px;padding-right: 70px;">
+                    <p:column/><p:column/>
+
+                    <p:column/><p:column/><p:column/>
+                    <!--Esudiantes-->
+                    <p:outputLabel for="txtEstudiante" value="Estudiante a inscribir"/>
+                    <p:inputText id="txtEstudiante" value="#{inscripcionController.estudiante.id_estudiante}" disabled="true" style="text-align: center">
+                        <f:ajax listener="#{inscripcionController.alElegirFila}" />                  
+                    </p:inputText>
+                    <p:commandButton id="estbtn" value="Seleccionar Estudiante" type="button" styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black;'/>
+                    <p:overlayPanel id="panelEstudiante" for="estbtn" hideEffect="fade" dynamic="true" modal="false" style="width:600px">
+
+                        <p:dataTable var="est" value="#{estudianteController.estudiantes}"
+                                     emptyMessage="No hay estudiantes en la base de datos"
+                                     paginator="true" rows="5" paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5" reflow="true" resizeMode="expand" rowExpandMode="multiply" style="font-size: 10px;text-align: center" widgetVar="data" 
+                                     selectionMode="single" selection="#{inscripcionController.estudiante}" rowKey="#{est.id_estudiante}">
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Buscar en todos los campos" style="padding-right: 10px"/>
+                                    <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" placeholder="Ingrese cualquier palabra o numero" style="width: 350px"/>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:ajax event="rowSelect" listener="#{inscripcionController.estudianteSeleccionado}" update=":frmDatosInscripcion:txtEstudiante "/>
+                            <p:ajax event="rowUnselect" listener="#{inscripcionController.estudianteDeseleccionado}" update=":frmDatosInscripcion:mensaje" />
+                            <p:column headerText="Id Estudiante" filterBy="#{est.id_estudiante}" filterStyle="width: 75px" filterMatchMode="contains" >
+                                <h:outputText value="#{est.id_estudiante}"  />
+                            </p:column>
+                            <p:column headerText="Nombre Completo" filterBy="#{est.nombres} #{est.apellidos}" filterStyle="width: 75px" filterMatchMode="contains" >
+                                <h:outputText value="#{est.nombres} #{est.apellidos}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Carrera" filterBy="#{est.id_carrera.nombre_carrera}" filterStyle="width: 75px" filterMatchMode="contains" >
+                                <h:outputText value="#{est.id_carrera.nombre_carrera}"/>
+                            </p:column>
+
+
+                        </p:dataTable>
+
+                    </p:overlayPanel>
+                    <!--Aqui termina Estudiantes-->
+                    <p:column/> <p:column/><p:column/>
+                    <!--Asignaturas-->
+                    <p:outputLabel for="txtImpartir" value="Asignatura a inscribir"/>
+                    <p:inputText id="txtImpartir" value="#{inscripcionController.impartir.id_impartir}" disabled="true" style="text-align: center">
+                        <f:ajax listener="#{inscripcionController.alElegirFila}" />                  
+                    </p:inputText>
+                    <p:commandButton id="impbtn" value="Seleccionar Asignatura" type="button" styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black;'/>
+                    <p:overlayPanel id="panelAsignatura" for="impbtn" hideEffect="fade" dynamic="true" modal="false" style="width:700px">
+                        <p:dataTable var="imp" value="#{inscripcionController.impartidas}"
+                                     emptyMessage="No hay materias a impartir en la base de datos"
+                                     paginator="true" rows="5" paginatorPosition="top"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5" reflow="true" resizeMode="expand" rowExpandMode="multiply" style="font-size: 10px;text-align: center" widgetVar="data"
+                                     selectionMode="single" selection="#{inscripcionController.impartir}" rowKey="#{imp.id_impartir}">
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Buscar en todos los campos" style="padding-right: 10px"/>
+                                    <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" placeholder="Ingrese cualquier palabra o número" style="width: 350px"/>
+                                </p:outputPanel>
+                            </f:facet>
+                            <p:ajax event="rowSelect" listener="#{inscripcionController.impartirSeleccionada}" update=":frmDatosInscripcion:txtImpartir "/>
+                            <p:ajax event="rowUnselect" listener="#{inscripcionController.impartirDeseleccionada}" update=":frmDatosInscripcion:mensaje" />
+                            <p:column headerText="Id Impartir" filterBy="##{imp.id_impartir}" filterStyle="width: 75px" filterMatchMode="contains">
+                                <h:outputText value="#{imp.id_impartir}"/>
+                            </p:column>
+                            <p:column headerText="Facultad" filterBy="#{imp.facultad.nombre_facultad}" filterStyle="width: 75px" filterMatchMode="contains">
+                                <h:outputText value="#{imp.facultad.nombre_facultad}"/>
+                            </p:column>
+                            <p:column headerText="Asignatura" filterBy="#{imp.asignatura.nombre_asignatura}" filterStyle="width: 75px" filterMatchMode="contains">
+                                <h:outputText value="#{imp.asignatura.nombre_asignatura}"/>
+                            </p:column>
+                            <p:column headerText="Sección" filterBy="#{imp.seccion}" filterStyle="width: 75px" filterMatchMode="contains">
+                                <h:outputText value="#{imp.seccion}"/>
+                            </p:column>
+                            <p:column  headerText="Docente" filterBy="#{imp.docente.nombres} #{imp.docente.apellidos}" filterStyle="width: 75px" filterMatchMode="contains">
+                                <h:outputText value="#{imp.docente.nombres} #{imp.docente.apellidos}"/>
+                            </p:column>
+                            <p:column headerText="Capacidad" filterBy="#{imp.capacidad}" filterStyle="width: 75px" filterMatchMode="contains">
+                                <h:outputText value="#{imp.capacidad}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:overlayPanel>
+                    <!--Aqui termina Asignaturas-->
+                    <p:column/>
+                    <p:outputLabel for="cboMatricula" value="Matricula"/>
+                    <p:selectOneMenu id="cboMatricula" value="#{inscripcionController.inscripcion.matricula}" required="true" requiredMessage="Campo requerido">
+                        <f:selectItem itemLabel="--Seleccione un valor--"/>
+                        <f:selectItem itemValue="1" itemLabel="1"/>
+                        <f:selectItem itemValue="2" itemLabel="2"/>
+                        <f:selectItem itemValue="3" itemLabel="3"/>
+                    </p:selectOneMenu>
+                    <p:message for="cboMatricula"/> 
+
+                    <p:column/>
+                    <p:commandButton icon="ui-icon-check" value="Registrar" action="/inscripcion.xhtml?faces-redirect=true" update="pgDatos, mensaje,:frmMostrar" actionListener="#{inscripcionController.registrar()}"
+                                     styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black'/>
+                    <p:column/>
+                    <p:column/>
+                    <p:column/>
+                </p:panelGrid>
+                <br/>
+            </p:fieldset>
+        </h:form>
+        <br/>
+
+        <p:separator style="width:1100px; "/>
+        <br/>
+
+        <h:form id="frmMostrar">
+            <p:fieldset legend="Inscripciones Registradas" toggleable="true" toggleSpeed="1000">
+                <p:dataTable var="ins" value="#{inscripcionController.inscripciones}"
+                             emptyMessage="No hay inscripciones en la base de datos"
+                             paginator="true" rows="5" paginatorPosition="top"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5" reflow="true" resizeMode="expand" rowExpandMode="multiply" style="font-size: 10px;text-align: center" widgetVar="data">
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Buscar en todos los campos" style="padding-right: 10px"/>
+                            <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" placeholder="Ingrese cualquier palabra o número" style="width: 350px"/>
+                        </p:outputPanel>
+                    </f:facet>
+                    <p:column headerText="Id Inscripción" filterBy="##{ins.id_inscripcion}" filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{ins.id_inscripcion}"/>
+                    </p:column>
+                    <p:column headerText="Carrera" filterBy="#{ins.id_estudiante.id_carrera.nombre_carrera}" filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{ins.id_estudiante.id_carrera.nombre_carrera}"/>
+                    </p:column>
+                    <p:column headerText="Asignatura" filterBy="#{ins.id_impartir.asignatura.nombre_asignatura}" filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{ins.id_impartir.asignatura.nombre_asignatura}"/>
+                    </p:column>
+                    <p:column headerText="UV" filterBy="#{ins.id_impartir.asignatura.uv}" filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{ins.id_impartir.asignatura.uv}"/>
+                    </p:column>
+                    <p:column  headerText="Estudiante" filterBy="#{ins.id_estudiante.nombres} #{ins.id_estudiante.apellidos}" filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{ins.id_estudiante.nombres} #{ins.id_estudiante.apellidos}"/>
+                    </p:column>
+                    <p:column headerText="Matricula" filterBy="#{ins.matricula}" filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{ins.matricula}"/>
+                    </p:column>
+
+                    <p:column headerText="Modificar" style="text-align: center;">
+
+                        <p:commandButton icon="ui-icon-pencil"
+                                         oncomplete="PF('dlgmodificar').show();" update=":frmModificar">
+                            <f:setPropertyActionListener target="#{inscripcionController.inscripcion}" value="#{ins}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="Eliminar" style="text-align: center;">
+                        <p:commandButton icon="ui-icon-trash" oncomplete="PF('dlgeliminar').show();">
+                            <f:setPropertyActionListener target="#{inscripcionController.inscripcion}" value="#{ins}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+        </h:form>
+
+        <p:dialog id="dlg" header="Modificar Inscripción" showEffect="fade" hideEffect="fade"
+                  widgetVar="dlgmodificar" modal="true" resizable="false" minWidth="250" style="background:#8A0C0C;">
+            <h:form id="frmModificar">
+                <p:fieldset legend="Datos de la Inscripción" style="margin-right: 250px ;margin-left: 250px; border-style: solid; border-color: #000000;" toggleable="true" toggleSpeed="1000">
+                    <p:panelGrid columns="3" id="pgDatos" layout="grid" style="text-align: center; padding-left: 120px;padding-right: 120px;">
+                        <p:outputLabel /><p:outputLabel /><p:outputLabel />
+
+                        <p:outputLabel /><p:outputLabel /><p:outputLabel />
+                        <!--Asignaturas-->
+                        <p:outputLabel for="txtImpartir" value="Asignatura a inscribir"/>
+                        <p:inputText id="txtImpartir" value="#{inscripcionController.impartir.asignatura.id_asignatura}" disabled="true" style="text-align: center">
+                            <f:ajax listener="#{inscripcionController.alElegirFila}" />                  
+                        </p:inputText>
+                        <p:commandButton id="impbtn" value="Seleccionar Asignatura" type="button" styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black;width: 150px; font-size: 11px'/>
+                        <p:overlayPanel id="panelAsignatura" for="impbtn" hideEffect="fade" dynamic="true" modal="false" style="width:600px">
+                            <p:dataTable id="impDT" var="asig" value="#{inscripcionController.impartidas}"
+                                         emptyMessage="No hay asignaturas en la base de datos"
+                                         paginator="true" rows="5" paginatorPosition="top"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5" reflow="true" resizeMode="expand" rowExpandMode="multiply" style="font-size: 10px;text-align: center" widgetVar="data"
+                                         selectionMode="single" selection="#{inscripcionController.impartir.asignatura}" rowKey="#{asig.asignatura.id_asignatura}">
+
+                                <f:facet name="header">
+                                    <p:outputPanel>
+                                        <h:outputText value="Buscar en todos los campos" style="padding-right: 10px"/>
+                                        <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" placeholder="Ingrese cualquier palabra o numero" style="width: 350px;text-align: center"/>
+                                    </p:outputPanel>
+                                </f:facet>
+                                <p:ajax event="rowSelect" listener="#{inscripcionController.asignaturaSeleccionada}" update=":frmDatosSeccion:txtImpartir "/>
+                                <p:ajax event="rowUnselect" listener="#{inscripcionController.asignaturaDeseleccionada}" update=":frmDatosSeccion:mensaje" />
+
+                                <p:column headerText="Id Impartir" filterBy="##{imp.id_impartir}" filterStyle="width: 75px" filterMatchMode="contains">
+                                    <h:outputText value="#{imp.id_impartir}"/>
+                                </p:column>
+                                <p:column headerText="Facultad" filterBy="#{imp.facultad.nombre_facultad}" filterStyle="width: 75px" filterMatchMode="contains">
+                                    <h:outputText value="#{imp.facultad.nombre_facultad}"/>
+                                </p:column>
+                                <p:column headerText="Asignatura" filterBy="#{imp.asignatura.nombre_asignatura}" filterStyle="width: 75px" filterMatchMode="contains">
+                                    <h:outputText value="#{imp.asignatura.nombre_asignatura}"/>
+                                </p:column>
+                                <p:column headerText="Sección" filterBy="#{imp.seccion}" filterStyle="width: 75px" filterMatchMode="contains">
+                                    <h:outputText value="#{imp.seccion}"/>
+                                </p:column>
+                                <p:column  headerText="Docente" filterBy="#{imp.docente.nombres} #{imp.docente.apellidos}" filterStyle="width: 75px" filterMatchMode="contains">
+                                    <h:outputText value="#{imp.docente.nombres} #{imp.docente.apellidos}"/>
+                                </p:column>
+                                <p:column headerText="Capacidad" filterBy="#{imp.capacidad}" filterStyle="width: 75px" filterMatchMode="contains">
+                                    <h:outputText value="#{imp.capacidad}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:overlayPanel>
+                        <!--Aqui termina Asignaturas-->
+
+
+
+                        <p:outputLabel for="cboEstudiante" value="Estudiante"/>
+                        <p:selectOneMenu id="cboEstudiante" value="#{inscripcionController.estudiante.id_estudiante}">
+                            <f:selectItems value="#{inscripcionController.estudiantes}" var="est" itemLabel="#{est.nombres} #{est.apellidos}" itemValue="#{est.id_estudiante}"/>
+                        </p:selectOneMenu>
+                        <p:message for="cboEstudiante"/>
+
+                        <p:outputLabel for="txtMatricula" value="Matricula"/>
+                        <p:inputText id="txtMatricula" value="#{inscripcionController.inscripcion.matricula}" required="true"/>
+                        <p:message for="txtMatricula"/>
+
+                        <p:column/>
+                        <p:commandButton value="Modificar" update=":frmMostrar"
+                                         actionListener="#{inscripcionController.modificar()}"
+                                         oncomplete="PF('dlgmodificar').hide();" action="/inccripcion.xhtml" styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black'/>
+                        <p:column/>
+                        <p:column/>
+                        <p:column/>
+                    </p:panelGrid>
+                    <br/>
+                </p:fieldset>
+            </h:form>
+            <br/>
+        </p:dialog>
+        <p:dialog id="dlg2" header="Eliminar Inscripción"
+                  showEffect="explode" hideEffect="explode"
+                  widgetVar="dlgeliminar" modal="true" resizable="false" minWidth="200">
+            <h:form id="formEliminar">
+                <h:outputText value="¿Desea eliminar este registro?"/>
+                <p:commandButton value="Si" actionListener="#{inscripcionController.eliminar()}"
+                                 update=":frmMostrar" action="/inscripcion.xhtml" oncomplete="PF('dlgeliminar').hide();"/>
+                <p:commandButton value="No" onclick="PF('dlgeliminar').hide()"/>
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>

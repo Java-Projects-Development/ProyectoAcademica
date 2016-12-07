@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>REGISTRO DE CARRERAS</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"/>
+    </h:head>
+    <h:body style="background-color: #8A0C0C">
+        <h:form>
+            <p:menubar model="#{menuController.model}">
+
+
+                <f:facet name="options">
+                    <p:commandButton value="Cerrar Sesión" actionListener="#{menuController.cerrarSesion()}" action="/login?faces-redirect=true"/>
+                </f:facet>
+
+            </p:menubar>
+            <br/>
+            <p:separator style="width: 1100px;"/>
+            <br/>
+
+            <p:graphicImage library="images" name="unicaes_v2_res.png"  height="150px" style="padding-right: 40px; float: right;" url="/inicio.xhtml"  />
+            <br/>
+        </h:form>
+
+
+        <h:form id="frmDatosCarrera" style="font-size: 12px">
+            <p:growl id="mensaje" autoUpdate="true" severity="info,fatal" showSummary="true" showDetail="true"/>
+            <p:fieldset legend="Datos de la Carrera" style="margin-right: 220px ;margin-left: 220px; border-style: solid; border-color: #000000;" toggleable="true" toggleSpeed="1000">
+                <p:panelGrid columns="3" id="pgDatos"  layout="grid" style="text-align: center; padding-left: 120px;padding-right: 120px;">
+                    <p:outputLabel /><p:outputLabel /><p:outputLabel />
+                    <p:outputLabel /><p:outputLabel /><p:outputLabel />
+
+                    <p:outputLabel for="txtIDCarrera" value="Código Carrera"/>
+                    <p:inputText id="txtIDCarrera" value="#{carreraController.carrera.codigo_carrera}" required="true" requiredMessage="El código de la carrera es obligatorio"/>
+                    <p:message for="txtIDCarrera"/>
+
+                    <p:outputLabel for="txtNombre" value="Nombre de la Carrera"/>
+                    <p:inputText id="txtNombre" value="#{carreraController.carrera.nombre_carrera}" required="true" requiredMessage="El nombre de la carrera es obligatorio"/>
+                    <p:message for="txtNombre"/>
+
+                    <p:outputLabel for="cboFacultad" value="Facultad"/>
+                    <p:selectOneMenu id="cboFacultad" value="#{carreraController.facultad.id_facultad}" required="true" requiredMessage="Debe asignar una facultad a la carrera">
+                        <f:selectItem itemLabel="-- Seleccione una opción --" />
+                        <f:selectItems value="#{carreraController.facultades}" var="fac" itemLabel="#{fac.nombre_facultad}" itemValue="#{fac.id_facultad}"/>
+                    </p:selectOneMenu>
+                    <p:message for="cboFacultad"/>
+                    <p:column/>
+                    <p:commandButton icon="ui-icon-check" value="Registrar" action="/carreras.xhtml" update=":frmDatosCarrera, mensaje,:frmMostrar" actionListener="#{carreraController.registrar()}"
+                                     styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black'/>
+                    <p:column/>
+                    <p:column/>
+                    <p:column/>
+                </p:panelGrid>
+                <br/>
+            </p:fieldset>
+        </h:form>
+
+        <p:separator style="width:1100px; "/>
+        <br/>
+
+        <p:fieldset legend="Carreras Registradas" toggleable="true" toggleSpeed="1000">
+            <h:form id="frmMostrar">
+                <p:dataTable var="carr" value="#{carreraController.carreras}"
+                             emptyMessage="No hay carreras en la base de datos"
+                             paginator="true" rows="5" paginatorPosition="bottom"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5" reflow="true" resizeMode="expand" rowExpandMode="multiply" style="font-size: 10px;text-align: center" widgetVar="data" >
+
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Buscar en todos los campos" style="padding-right: 10px"/>
+                            <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" placeholder="Ingrese cualquier palabra o numero" style="width: 350px"/>
+                            
+                            <p:commandButton action="/reportesCarreras.xhtml?faces-redirect=true" value="Reportes" styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black'/>
+                            
+                        </p:outputPanel>
+                    </f:facet>
+                    
+                        
+                    <p:column headerText="Id Carrera" filterBy="#{carr.id_carrera}" filterStyle="width: 75px" filterMatchMode="contains" style="text-align: center">
+                        <h:outputText value="#{carr.id_carrera}"/>
+                    </p:column>
+                    <p:column headerText="Código Carrera" filterBy="#{carr.codigo_carrera}" filterStyle="width: 75px" filterMatchMode="contains" style="text-align: center">
+                        <h:outputText value="#{carr.codigo_carrera}"  />
+                    </p:column>
+                    <p:column headerText="Nombre Carrera" filterBy="#{carr.nombre_carrera}" filterStyle="width: 75px" filterMatchMode="contains" style="text-align: center">
+                        <h:outputText value="#{carr.nombre_carrera}"/>
+                    </p:column>
+                    <p:column headerText="Facultad" filterBy="#{carr.facultad.nombre_facultad}" filterStyle="width: 75px" filterMatchMode="contains" style="text-align: center">
+                        <h:outputText value="#{carr.facultad.nombre_facultad}"/>
+                    </p:column>
+
+                    <p:column headerText="Modificar" style="text-align: center;">
+
+                        <p:commandButton icon="ui-icon-pencil"
+                                         oncomplete="PF('dlgmodificar').show();" update=":frmModificar" >
+                            <f:setPropertyActionListener target="#{carreraController.carrera}" value="#{carr}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="Eliminar" style="text-align: center;">
+                        <p:commandButton icon="ui-icon-trash" oncomplete="PF('dlgeliminar').show();">
+                            <f:setPropertyActionListener target="#{carreraController.carrera}" value="#{carr}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:fieldset>
+        <p:dialog id="dlg" header="Modificar Carrera" showEffect="fade" hideEffect="fade"
+                  widgetVar="dlgmodificar" modal="true" resizable="false" minWidth="250" style="background:#8A0C0C;">
+            <h:form id="frmModificar">
+                <p:fieldset legend="Datos de la Carrera" style="border-style: solid; border-color: #000000;">
+                    <p:panelGrid columns="3" id="pgDatosFacultad" layout="grid">
+                        <p:outputLabel /><p:outputLabel /><p:outputLabel />
+                        <p:outputLabel for="txtIDCarrera" value="Código Carrera"/>
+                        <p:inputText id="txtIDCarrera" value="#{carreraController.carrera.codigo_carrera}" required="true"/>
+                        <p:message for="txtIDCarrera"/>
+
+                        <p:outputLabel for="txtNombre" value="Nombre de la Carrera"/>
+                        <p:inputText id="txtNombre" value="#{carreraController.carrera.nombre_carrera}" required="true"/>
+                        <p:message for="txtNombre"/>
+
+                        <p:outputLabel for="cboFacultad" value="Facultad"/>
+                        <p:selectOneMenu id="cboFacultad" value="#{carreraController.facultad.id_facultad}">
+                            <f:selectItems value="#{carreraController.facultades}" var="fac" itemLabel="#{fac.nombre_facultad}" itemValue="#{fac.id_facultad}"/>
+                        </p:selectOneMenu>
+                        <p:column/>
+                        <p:column/>
+                        <p:commandButton value="Modificar" update=":frmMostrar"
+                                         actionListener="#{carreraController.modificar()}"
+                                         oncomplete="PF('dlgmodificar').hide();" action="/carreras.xhtml" styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black'/>
+                        <p:column/>
+                        <p:column/>
+                        <p:column/>
+                    </p:panelGrid>
+                    <br/>
+                </p:fieldset>
+            </h:form>
+            <br/>
+        </p:dialog>
+        <p:dialog id="dlg2" header="Eliminar Carrera"
+                  showEffect="explode" hideEffect="explode"
+                  widgetVar="dlgeliminar" modal="true" resizable="false" minWidth="200">
+            <h:form id="formEliminar">
+                <h:outputText value="¿Desea eliminar este registro?"/>
+                <p:commandButton value="Si" actionListener="#{carreraController.eliminar()}"
+                                 update=":frmMostrar" action="/carreras.xhtml" oncomplete="PF('dlgeliminar').hide();"/>
+                <p:commandButton value="No" onclick="PF('dlgeliminar').hide()"/>
+            </h:form>
+        </p:dialog>
+
+    </h:body>
+</html>

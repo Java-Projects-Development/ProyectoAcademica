@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>REGISTRO DE DOCENTES</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"/>
+    </h:head>
+    <h:body style="background-color: #8A0C0C">
+        <h:form>
+            <p:menubar model="#{menuController.model}">
+                
+
+                <f:facet name="options">
+                    <p:commandButton value="Cerrar Sesión" actionListener="#{menuController.cerrarSesion()}" action="/login?faces-redirect=true"/>
+                </f:facet>
+
+            </p:menubar>
+            <br/>
+
+            <p:separator style="width: 1100px;"/>
+            <br/>
+            <h:form style="text-align: right">
+                <p:graphicImage library="images" name="unicaes_v2_res.png"  height="150px" style="padding-right: 40px; float: right;" url="/inicio.xhtml"/>
+            </h:form>
+            <br/>
+        </h:form>
+        <h:form id="frmDatosPersonales" style="font-size: 12px">
+            <p:growl id="mensaje" autoUpdate="true" severity="info,fatal" showSummary="true" showDetail="true"/>
+            <p:fieldset legend="Datos Personales" style="margin-right: 220px ;margin-left: 220px; border-style: solid; border-color: #000000;" toggleable="true" toggleSpeed="1000" >
+                <p:panelGrid columns="3" id="pgDatos" layout="grid" style="text-align: center; padding-left: 120px;padding-right: 120px;">
+                    <p:outputLabel /><p:outputLabel /><p:outputLabel />
+                    <p:outputLabel for="txtNombres" value="Nombres"/>
+                    <p:inputText id="txtNombres" value="#{docenteController.docente.nombres}" required="true" requiredMessage="Los nombres son obligatorios"/>
+                    <p:message for="txtNombres"/>
+
+                    <p:outputLabel for="txtApellidos" value="Apellidos"/>
+                    <p:inputText id="txtApellidos" value="#{docenteController.docente.apellidos}" required="true" requiredMessage="Los apellidos son obligatorios"/>
+                    <p:message for="txtApellidos"/>
+
+                    <p:outputLabel for="txtDUI" value="DUI"/>
+                    <p:inputMask id="txtDUI" value="#{docenteController.docente.dui}" required="true" mask="99999999-9" requiredMessage="El DUI es obligatorio"/>
+                    <p:message for="txtDUI"/>
+                    
+                    <p:outputLabel for="txtNIT" value="NIT"/>
+                    <p:inputMask id="txtNIT" value="#{docenteController.docente.nit}" required="true" mask="9999-999999-999-9" requiredMessage="El NIT es obligatorio" />
+                    <p:message for="txtNIT"/>
+
+                    <p:outputLabel for="txtFecha" value="Fec. Nacimiento"/>
+                    <p:calendar id="txtFecha" value="#{docenteController.docente.fechaNacimiento}" locale="es" required="true" requiredMessage="La fecha de nacimiento es obligatoria"/>
+                    <p:message for="txtFecha"/>
+
+                    <p:outputLabel for="txtDireccion" value="Dirección"/>
+                    <p:inputTextarea id="txtDireccion" value="#{docenteController.docente.direccion}" required="true" requiredMessage="La dirección es obligatoria"/>
+                    <p:message for="txtDireccion"/>
+
+                    <p:outputLabel for="rdbSexo" value="Sexo"/>
+                    <p:selectOneRadio id="rdbSexo" value="#{docenteController.docente.sexo}" required="true" requiredMessage="El sexo del docente es obligatorio">
+                        <f:selectItem itemValue="M" itemLabel="Masculino"/>
+                        <f:selectItem itemValue="F" itemLabel="Femenino"/>
+                    </p:selectOneRadio>
+                    <p:message for="rdbSexo"/>
+
+                    <p:outputLabel for="txtTelefono" value="Teléfono"/>
+                    <p:inputMask id="txtTelefono" value="#{docenteController.docente.telefono}" required="true" mask="9999-9999" requiredMessage="El teléfono es obligatorio"/>
+                    <p:message for="txtTelefono"/>
+
+                    <p:outputLabel for="cboFacultad" value="Facultad"/>
+                    <p:selectOneMenu id="cboFacultad" value="#{docenteController.facultad.id_facultad}" required="true" requiredMessage="Debe asignar una facultad al docente">
+                        <f:selectItem itemLabel="-- Seleccione una opción --" />
+                        <f:selectItems value="#{docenteController.facultades}" var="fac" itemLabel="#{fac.nombre_facultad}" itemValue="#{fac.id_facultad}"/>
+                    </p:selectOneMenu>
+                    <p:message for="cboFacultad"/>
+                    <p:column/>
+                    <p:commandButton icon="ui-icon-check" value="Registrar" action="/docentes.xhtml" update="mensaje, :frmDatosPersonales :frmMostrar" actionListener="#{docenteController.registrar()}"
+                                     styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black' />                             
+                    <p:column/><p:column/><p:column/>
+                </p:panelGrid>
+                <br/>
+            </p:fieldset>
+        </h:form>
+        <br/>
+
+
+        <p:separator style="width:1100px; "/>
+        <br/>
+
+        <h:form id="frmMostrar">
+            <p:fieldset legend="Docentes Registrados" toggleable="true" toggleSpeed="1000">
+                <p:dataTable var="doc" value="#{docenteController.docentes}"
+                             emptyMessage="No hay docentes en la base de datos"
+                             paginator="true" rows="5" paginatorPosition="bottom"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks}
+                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5" reflow="true" resizeMode="expand" rowExpandMode="multiply" style="font-size: 10px;text-align: center" widgetVar="data">
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Buscar en todos los campos" style="padding-right: 10px"/>
+                            <p:inputText  id="globalFilter" onkeyup= "PF('data').filter()" placeholder="Ingrese cualquier palabra o número" style="width: 350px"/>
+                            <p:commandButton action="/reportesDocentes.xhtml?faces-redirect=true" value="Reportes" styleClass="ui-priority-primary" style='background: #F0B643;color: black;border-color: black'/>
+                        </p:outputPanel>
+                    </f:facet>
+                    <p:column headerText="Id Docente" filterBy="#{doc.id_docente}" filterStyle="width: 75px" filterMatchMode="contains" style="text-align: center">
+                        <h:outputText value="#{doc.id_docente}"/>
+                    </p:column>
+                    <p:column headerText="Nombre Completo" filterBy="#{doc.nombres} #{doc.apellidos}" filterStyle="width: 75px" filterMatchMode="contains" style="text-align: center">
+                        <h:outputText value="#{doc.nombres} #{doc.apellidos}"/>
+                    </p:column>
+                    <p:column headerText="DUI" filterBy="#{doc.dui}" filterStyle="width: 75px" filterMatchMode="contains" >
+                        <h:outputText value="#{doc.dui}"/>
+                    </p:column>
+                    <p:column headerText="NIT" filterBy="#{doc.nit}" filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{doc.nit}"/>
+                    </p:column>
+                    <p:column  headerText="Dirección" filterBy="#{doc.direccion}" filterStyle="width: 75px" filterMatchMode="contains" >
+                        <h:outputText value="#{doc.direccion}"/>
+                    </p:column>
+                    <p:column headerText="Fec. Nacimiento" filterBy="#{doc.fechaNacimiento}" filterStyle="width: 75px" filterMatchMode="contains" >
+                        <h:outputText value="#{doc.fechaNacimiento}">
+                            <f:convertDateTime pattern="dd-MMM-yyyy" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column  headerText="Sexo" filterBy="#{doc.sexo}" filterStyle="width: 75px" filterMatchMode="contains">
+                        <h:outputText value="#{doc.sexo}"/>
+                    </p:column>
+                    <p:column headerText="Telefono" filterBy="#{doc.telefono}" filterStyle="width: 75px" filterMatchMode="contains" >
+                        <h:outputText value="#{doc.telefono}"/>
+                    </p:column>
+                    <p:column headerText="Facultad" filterBy="#{doc.facultad.nombre_facultad}" filterStyle="width: 75px" filterMatchMode="contains" >
+                        <h:outputText value="#{doc.facultad.nombre_facultad}"/>
+                    </p:column>
+
+                    <p:column headerText="Modificar" >
+
+                        <p:commandButton icon="ui-icon-pencil"
+                                         oncomplete="PF('dlgmodificar').show();" update=":frmModificar">
+                            <f:setPropertyActionListener target="#{docenteController.docente}" value="#{doc}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="Eliminar" style="text-align: center;">
+                        <p:commandButton icon="ui-icon-trash" oncomplete="PF('dlgeliminar').show();">
+                            <f:setPropertyActionListener target="#{docenteController.docente}" value="#{doc}"/>
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+            </p:fieldset>
+        </h:form>
+
+        <p:dialog id="dlg" header="Modificar Docente" showEffect="fade" hideEffect="fade"
+                  widgetVar="dlgmodificar" modal="true" resizable="false" minWidth="250" style="background:#8A0C0C;">
+            <h:form id="frmModificar">
+                <p:fieldset legend="Datos Personales" style="border-style: solid; border-color: #000000;" >
+                    <p:panelGrid columns="3" id="pgDatos" layout="grid">
+                        <p:outputLabel /><p:outputLabel /><p:outputLabel />
+                        <p:outputLabel for="txtNombres" value="Nombres"/>
+                        <p:inputText id="txtNombres" value="#{docenteController.docente.nombres}" required="true"/>
+                        <p:growl for="txtNombres"/>
+
+                        <p:outputLabel for="txtApellidos" value="Apellidos"/>
+                        <p:inputText id="txtApellidos" value="#{docenteController.docente.apellidos}" required="true"/>
+                        <p:growl for="txtApellidos"/>
+
+                        <p:outputLabel for="txtNIT" value="NIT"/>
+                        <p:inputMask id="txtNIT" value="#{docenteController.docente.nit}" required="true" mask="9999-999999-999-9"/>
+                        <p:growl for="txtNIT"/>
+
+                        <p:outputLabel for="txtDUI" value="DUI"/>
+                        <p:inputMask id="txtDUI" value="#{docenteController.docente.dui}" required="true" mask="99999999-9" />
+                        <p:growl for="txtDUI"/>
+
+                        <p:outputLabel for="txtFecha" value="Fec. Nacimiento"/>
+                        <p:calendar id="txtFecha" value="#{docenteController.docente.fechaNacimiento}" locale="es" required="true"/>
+                        <p:growl for="txtFecha"/>
+
+                        <p:outputLabel for="txtDireccion" value="Dirección"/>
+                        <p:inputTextarea id="txtDireccion" value="#{docenteController.docente.direccion}" required="true"/>
+                        <p:growl for="txtDireccion"/>
+
+                        <p:outputLabel for="rdbSexo" value="Sexo"/>
+                        <p:selectOneRadio id="rdbSexo" value="#{docenteController.docente.sexo}" required="true">
+                            <f:selectItem itemValue="M" itemLabel="Masculino"/>
+                            <f:selectItem itemValue="F" itemLabel="Femenino"/>
+                        </p:selectOneRadio>
+                        <p:growl for="rdbSexo"/>
+
+                        <p:outputLabel for="txtTelefono" value="Teléfono"/>
+                        <p:inputMask id="txtTelefono" value="#{docenteController.docente.telefono}" required="true" mask="9999-9999"/>
+                        <p:growl for="txtTelefono"/>
+
+                        <p:outputLabel for="cboFacultad" value="Facultad"/>
+                        <p:selectOneMenu id="cboFacultad" value="#{docenteController.facultad.id_facultad}">
+                            <f:selectItems value="#{docenteController.facultades}" var="fac" itemLabel="#{fac.nombre_facultad}" itemValue="#{fac.id_facultad}"/>
+                        </p:selectOneMenu>
+                        <p:column/>
+                        <p:column/>
+                        <p:commandButton value="Modificar" update=":frmMostrar"
+                                         actionListener="#{docenteController.modificar()}"
+                                         oncomplete="PF('dlgmodificar').hide();" style='background: #F0B643;color: black;border-color: black' 
+                                         action="/docentes.xhtml" styleClass="ui-priority-primary" />         
+                        <p:column/><p:column/><p:column/>
+                    </p:panelGrid>
+                </p:fieldset>
+            </h:form>
+        </p:dialog>
+        <p:dialog id="dlg2" header="Eliminar Docente"
+                  showEffect="explode" hideEffect="explode"
+                  widgetVar="dlgeliminar" modal="true" resizable="false" minWidth="200">
+            <h:form id="formEliminar">
+                <h:outputText value="¿Desea eliminar este registro?"/>
+                <p:commandButton value="Si" actionListener="#{docenteController.eliminar()}"
+                                 update=":frmMostrar" action="/docentes.xhtml" oncomplete="PF('dlgeliminar').hide();"/>
+                <p:commandButton value="No" onclick="PF('dlgeliminar').hide()"/>
+            </h:form>
+        </p:dialog>
+        <!--Scripts-->
+        <h:outputScript library="js" name="spanishLocale.js"/>
+    </h:body>
+</html>
